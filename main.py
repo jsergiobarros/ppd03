@@ -6,16 +6,23 @@ import paho.mqtt.client as paho
 from random import randrange,uniform
 import time
 
-broker = 'broker.emqx.io'
-client = paho.Client("Temperatura")
-client1 = paho.Client("Temperatura")
-
-#client = paho.Client("Velocidade")
-client.connect(broker)
-client1.connect(broker)
-client.publish("temperatura",1)
-client1.publish("temperatura",1)
-port = 1883
+def main():
+    def onMessage(client,userdata,message):
+        print(f"messagem {str(message.payload.decode('utf-8'))}")
 
 
+    broker = 'mqtt.eclipseprojects.io'
+
+
+
+
+    client = paho.Client("pessoa")
+
+    client.connect(broker)
+    #client.loop_start()
+    client.subscribe("topico/pdd")
+    client.on_message=onMessage
+    client.loop_forever()
+    #client.loop_stop()
+main()
 

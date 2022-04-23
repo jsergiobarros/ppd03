@@ -1,5 +1,6 @@
+import threading
 
-
+import instancia
 from tkinter import *
 from paho.mqtt import client as mqtt
 broker = 'broker.emqx.io'
@@ -9,16 +10,25 @@ port = 1883
 win=Tk()  # tela inicial, de selecionar peça e definir nome de usuário
 win.geometry("400x200")
 win.resizable(False, False)
-win.title("Tsoro Yematatu")
+win.title("Sensor")
 canvas0=Canvas(win, width=400, height=200)
 label = Label(canvas0, width=20, text="digite o Nome do sensor")
 nome = Entry(canvas0, width=20)
+nome.insert(0,"Digite")
 foto0 = PhotoImage(file="temperatura.png")
 foto1 = PhotoImage(file="umidade.png")
 foto2 = PhotoImage(file="velocidade.png")
 button1 = Button(canvas0, image=foto0, borderwidth=0, command = lambda: getNome("Temperatura",foto0))
 button2 = Button(canvas0, image=foto1, borderwidth=0, command = lambda: getNome("Umidade",foto1))
 button3 = Button(canvas0, image=foto2, borderwidth=0, command = lambda: getNome("Velocidade",foto2))
+
+
+
+def inst(topico,nome,linf,lsup):
+
+    sensor = threading.Thread(target=instancia.instancia, args=(topico,nome,linf,lsup))
+    sensor.start()
+
 
 
 def getNome(txt,foto):
@@ -32,15 +42,19 @@ def getNome(txt,foto):
     label2.grid(row=2)
     limiteSup.grid(row=3)
     button4.grid(pady=20,row=4)
+
     if txt=="Temperatura":
         limiteInf.insert(0, 0)
         limiteSup.insert(0,35)
+        button4["command"] = lambda: inst("Temperatura",nome.get(),limiteInf.get(),limiteSup.get())
     elif txt=="Umidade":
         limiteInf.insert(0, 30)
         limiteSup.insert(0,70)
+        button4["command"] = lambda: inst("Umidade",nome.get(),limiteInf.get(),limiteSup.get())
     elif txt=="Velocidade":
         limiteInf.insert(0, 20)
         limiteSup.insert(0,100)
+        button4["command"] = lambda: inst("Velocidade",nome.get(),limiteInf.get(),limiteSup.get())
 
 
 label.grid(pady=20,row=0,column=1)
