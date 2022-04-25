@@ -1,17 +1,14 @@
 import threading
+from tkinter import messagebox
 
 import instancia
 from tkinter import *
-from paho.mqtt import client as mqtt
-broker = 'broker.emqx.io'
-port = 1883
 
-
-win=Tk()  # tela inicial, de selecionar peça e definir nome de usuário
-win.geometry("400x200")
-win.resizable(False, False)
-win.title("Sensor")
-canvas0=Canvas(win, width=400, height=200)
+sensores=Tk()  # tela inicial, de selecionar peça e definir nome de usuário
+sensores.geometry("400x200")
+sensores.resizable(False, False)
+sensores.title("Sensor")
+canvas0=Canvas(sensores, width=400, height=200)
 label = Label(canvas0, width=20, text="digite o Nome do sensor")
 nome = Entry(canvas0, width=20)
 nome.insert(0,"Digite")
@@ -25,15 +22,20 @@ button3 = Button(canvas0, image=foto2, borderwidth=0, command = lambda: getNome(
 
 
 def inst(topico,nome,linf,lsup):
+    try:
+        if float(linf) > float(lsup):
+            float("as")
+        sensor = threading.Thread(target=instancia.instancia, args=(topico, nome, linf, lsup))
+        sensor.start()
+    except:
+        messagebox.showerror(title="valor incorreto", message="valor nao aceito, \ntente novamente")
 
-    sensor = threading.Thread(target=instancia.instancia, args=(topico,nome,linf,lsup))
-    sensor.start()
 
 
 
 def getNome(txt,foto):
     canvas0.create_line(0, 180, 400, 180, fill="black", width=1)
-    win.geometry("400x400")
+    sensores.geometry("400x400")
     limiteInf.delete(0, END)
     limiteSup.delete(0, END)
     label1["text"]="Sensor de "+txt+"\n\nLimite Inferior"
@@ -62,7 +64,7 @@ nome.grid(pady=10,row=1,column=1)
 button1.grid(pady=20,row=2, column=0)
 button2.grid(pady=20,padx=10,row=2, column=1)
 button3.grid(pady=20,row=2, column=2)
-canvas1=Canvas(win,width=400, height=100)
+canvas1=Canvas(sensores,width=400, height=100)
 button4 = Button(canvas1, image=foto2, borderwidth=0)
 label1 = Label(canvas1,text="")
 limiteInf = Entry(canvas1, width=20)
@@ -73,4 +75,4 @@ label1.grid(row=0)
 
 canvas0.pack()
 canvas1.pack()
-win.mainloop()
+sensores.mainloop()

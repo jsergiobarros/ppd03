@@ -13,16 +13,25 @@ def main():
 
     broker = 'mqtt.eclipseprojects.io'
 
-
+    """var1 = IntVar()
+    Checkbutton(canvas, text="male", variable=var1).grid(row=5, sticky=W)
+    var2 = IntVar()
+    Checkbutton(canvas, text="female", variable=var2, command=lambda: print("click")).grid(row=6, sticky=W)"""
 
 
     client = paho.Client("pessoa")
 
     client.connect(broker)
+    print("teste")
     #client.loop_start()
-    client.subscribe("topico/pdd")
+    client.subscribe("Velocidade")
+    client.subscribe("Temperatura")
+    client.subscribe("Umidade")
+    #client.unsubscribe("Velocidade")
     client.on_message=onMessage
     client.loop_forever()
+    print("teste")
+
     #client.loop_stop()
 main()
 
