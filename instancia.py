@@ -32,7 +32,7 @@ class instancia:
             print(f"o Sensor de {self.topic}: {self.nome} superou os limites com o valor {self.atual} ")
             if self.atual > self.lsup or self.atual < self.linf:
                 self.client.publish(self.topic,
-                                    str(f"o Sensor de {self.topic}: {self.nome} superou os limites com o valor {self.atual} "))
+                                    str(f"O Sensor de {self.topic}: {self.nome} superou os limites com o valor {self.atual} "))
             if self.leitura != 0:
                 self.leitura["text"] = f"leitura atual {self.atual}"
             self.atual += random.randint(-3, 3)
@@ -97,8 +97,6 @@ class instancia:
         entry1.grid(row=3, column=0)
         enviar.grid(row=3, column=1)
         button.grid(row=1)
-        radio = Radiobutton(canvas, text="txt")
-        radio.grid(row=4)
         canvas.pack()
 
         def desliga():
